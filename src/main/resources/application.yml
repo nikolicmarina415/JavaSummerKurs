@@ -1,0 +1,5 @@
+spring:
+   application:
+     name: Java Kurs Summer 2024
+   profiles:
+     active: prod
