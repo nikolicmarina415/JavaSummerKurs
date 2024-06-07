@@ -45,5 +45,5 @@ public class FakeStoreConfig {
     public void setTtl(Integer ttl) {
         this.ttl = ttl;
     }
-
+    System.out.print("test");
 }
