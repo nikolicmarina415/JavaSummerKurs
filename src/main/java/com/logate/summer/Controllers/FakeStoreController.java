@@ -26,6 +26,7 @@ public class FakeStoreController {
         return new ResponseEntity<>(fakeStoreProductDTOList, HttpStatus.OK);
     }
 
+
     //product sa id-ijem
     @GetMapping("products/{id}")
     public ResponseEntity<FakeStoreProductDTO> getProductById(@PathVariable Integer id) {
