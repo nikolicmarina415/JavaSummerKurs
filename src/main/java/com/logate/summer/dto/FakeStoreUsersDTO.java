@@ -15,4 +15,6 @@ public class FakeStoreUsersDTO {
     String username;
     String password;
     String name;
+    String adress;
+    String phone;
 }

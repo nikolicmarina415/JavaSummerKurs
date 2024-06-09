@@ -2,6 +2,8 @@ package com.logate.summer.Services;
 
 import com.logate.summer.dto.FakeStoreProductDTO;
 import com.logate.summer.dto.FakeStoreProductDTONoID;
+import com.logate.summer.dto.FakeStoreUsersDTO;
+import com.logate.summer.dto.FakeStoreUsersNoID;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,4 +60,35 @@ public class FakeStoreService {
                 restTemplate.exchange(url,HttpMethod.POST,fakeStoreProductDTOHttpEntity,FakeStoreProductDTO.class);
         return fakeStoreProductDTOResponseEntity.getBody();
     }
+    public List<FakeStoreUsersDTO> getAllUsers() {
+        String url = this.url+"/users";
+
+
+        ParameterizedTypeReference<List<FakeStoreUsersDTO>> listFakeStoreUsersDTO =
+                new ParameterizedTypeReference<List<FakeStoreUsersDTO>>(){};
+        ResponseEntity<List<FakeStoreUsersDTO>> fakeStoreUsersDTOResponseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, null, listFakeStoreUsersDTO);
+
+        return fakeStoreUsersDTOResponseEntity.getBody();
+    }
+
+    public FakeStoreUsersDTO getUsersById(Integer id) {
+        String url = this.url+"/users"+id;
+
+        ResponseEntity<FakeStoreUsersDTO> fakeStoreUsersDTOResponseEntity =
+                restTemplate.exchange(url, HttpMethod.GET, null, FakeStoreUsersDTO.class);
+        FakeStoreUsersDTO fakeStoreUsersDTO = fakeStoreUsersDTOResponseEntity.getBody();
+        return fakeStoreUsersDTO;
+    }
+
+    public FakeStoreUsersDTO addUser(FakeStoreUsersNoID fakeStoreUsersDTONoID) {
+        String url = this.url+"/users";
+
+        HttpEntity<FakeStoreUsersNoID> fakeStoreUsersDTOHttpEntity = new HttpEntity<>(fakeStoreUsersDTONoID);
+
+        ResponseEntity<FakeStoreUsersDTO> fakeStoreUsersDTOResponseEntity =
+                restTemplate.exchange(url,HttpMethod.POST,fakeStoreUsersDTOHttpEntity,FakeStoreUsersDTO.class);
+        return fakeStoreUsersDTOResponseEntity.getBody();
+    }
+}
 }
