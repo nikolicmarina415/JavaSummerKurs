@@ -13,26 +13,29 @@ import java.util.Map;
 public class MovieService {
 
     @Autowired
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
 
-    public List<MovieDTO> getAllMovies() {
-        return movieRepository.getAllMovies();
+    public MovieService(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
-    public MovieDTO getById(Integer id) {
+    public List<MovieDTO> getAll() {
+        return movieRepository.getAll();
+    }
+
+    public MovieDTO getById(int id) {
         return movieRepository.getById(id);
     }
 
-    public List<MovieDTO> getByParams(String title, String genre, Integer year) {
-        return movieRepository.getByParams(title,genre, year);
+    public List<MovieDTO> getByYearRange(int fromYear, int toYear) {
+        return movieRepository.getByYearRange(fromYear, toYear);
     }
-    public List<MovieDTO> getByReqMap(Map<String, Object> mapa) {
-        String title = (String) mapa.get("title");
-        String genre = (String) mapa.get("genre");
-        Integer year = (Integer) mapa.get("year");
-        return movieRepository.getByReqMap(mapa);
+
+    public List<MovieDTO> getByParamMap(Map<String, Object> params) {
+        return movieRepository.getByYearAndPrice(params);
     }
-    public List<MovieDTO> getByClass(MovieFilter movieFilter) {
-        return movieRepository.getByClass(movieFilter);
+
+    public List<MovieDTO> getByParamsClass(MovieFilter movieFilter) {
+        return movieRepository.getByParamsClass(movieFilter);
     }
 }

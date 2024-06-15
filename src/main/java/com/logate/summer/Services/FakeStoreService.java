@@ -1,12 +1,11 @@
 package com.logate.summer.Services;
 
-import com.logate.summer.dto.FakeStoreProductDTO;
-import com.logate.summer.dto.FakeStoreProductDTONoID;
-import com.logate.summer.dto.FakeStoreUsersDTO;
-import com.logate.summer.dto.FakeStoreUsersNoID;
+import com.logate.summer.dto.fakestore.FakeStoreProductDTO;
+import com.logate.summer.dto.fakestore.FakeStoreProductDTONoID;
+import com.logate.summer.dto.fakestore.CategoryFakeDTO;
+import com.logate.summer.dto.fakestore.UserFakeDTO;
+import com.logate.summer.dto.fakestore.UserFakeDTONoID;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -60,35 +59,53 @@ public class FakeStoreService {
                 restTemplate.exchange(url,HttpMethod.POST,fakeStoreProductDTOHttpEntity,FakeStoreProductDTO.class);
         return fakeStoreProductDTOResponseEntity.getBody();
     }
-    public List<FakeStoreUsersDTO> getAllUsers() {
+
+    public List<UserFakeDTO> getAllUsers() {
+
         String url = this.url+"/users";
-
-
-        ParameterizedTypeReference<List<FakeStoreUsersDTO>> listFakeStoreUsersDTO =
-                new ParameterizedTypeReference<List<FakeStoreUsersDTO>>(){};
-        ResponseEntity<List<FakeStoreUsersDTO>> fakeStoreUsersDTOResponseEntity =
-                restTemplate.exchange(url, HttpMethod.GET, null, listFakeStoreUsersDTO);
-
-        return fakeStoreUsersDTOResponseEntity.getBody();
+        ParameterizedTypeReference<List<UserFakeDTO>> parameterizedTypeReference = new ParameterizedTypeReference<List<UserFakeDTO>>() {};
+        try {
+            return restTemplate.exchange(url,HttpMethod.GET,null,parameterizedTypeReference)
+                    .getBody();
+        }catch (Exception e) {
+            log.error("Dogodila se greska {}:", e.getMessage());
+            return null;
+        }
     }
 
-    public FakeStoreUsersDTO getUsersById(Integer id) {
-        String url = this.url+"/users"+id;
-
-        ResponseEntity<FakeStoreUsersDTO> fakeStoreUsersDTOResponseEntity =
-                restTemplate.exchange(url, HttpMethod.GET, null, FakeStoreUsersDTO.class);
-        FakeStoreUsersDTO fakeStoreUsersDTO = fakeStoreUsersDTOResponseEntity.getBody();
-        return fakeStoreUsersDTO;
+    public List<CategoryFakeDTO> getAllCategories() {
+        String url = this.url + "/products/categories";
+        ParameterizedTypeReference<List<CategoryFakeDTO>> parameterizedTypeReference = new ParameterizedTypeReference<List<CategoryFakeDTO>>() {};
+        try {
+            return restTemplate.exchange(url,HttpMethod.GET,null,parameterizedTypeReference)
+                    .getBody();
+        }catch (Exception e) {
+            log.error("Dogodila se greska {}:", e.getMessage());
+            return null;
+        }
     }
 
-    public FakeStoreUsersDTO addUser(FakeStoreUsersNoID fakeStoreUsersDTONoID) {
-        String url = this.url+"/users";
-
-        HttpEntity<FakeStoreUsersNoID> fakeStoreUsersDTOHttpEntity = new HttpEntity<>(fakeStoreUsersDTONoID);
-
-        ResponseEntity<FakeStoreUsersDTO> fakeStoreUsersDTOResponseEntity =
-                restTemplate.exchange(url,HttpMethod.POST,fakeStoreUsersDTOHttpEntity,FakeStoreUsersDTO.class);
-        return fakeStoreUsersDTOResponseEntity.getBody();
+    public UserFakeDTO getUserById(Integer id) {
+        String url = this.url + "/users" + id;
+        try {
+            return restTemplate.exchange(url,HttpMethod.GET,null,UserFakeDTO.class)
+                    .getBody();
+        }catch (Exception e) {
+            log.error("Dogodila se greska {}:", e.getMessage());
+            return null;
+        }
     }
-}
+
+    public UserFakeDTO createUser(UserFakeDTONoID userFakeDTONoID) {
+        String url = this.url + "/users";
+        HttpEntity<UserFakeDTONoID> httpEntity = new HttpEntity<UserFakeDTONoID>(userFakeDTONoID);
+        log.info("Request object:{}", httpEntity);
+        try {
+            return restTemplate.exchange(url,HttpMethod.POST,httpEntity,UserFakeDTO.class)
+                    .getBody();
+        }catch (Exception e) {
+            log.error("Dogodila se greska {}:", e.getMessage());
+            return null;
+        }
+    }
 }

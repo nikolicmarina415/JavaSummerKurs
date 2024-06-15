@@ -1,10 +1,8 @@
+
 package com.logate.summer.Repositories;
 
-
 import com.logate.summer.dto.MovieDTO;
-import com.logate.summer.dto.UserDTO;
 import com.logate.summer.filter.MovieFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,67 +12,70 @@ import java.util.Map;
 @Repository
 public class MovieRepository {
 
-    public List<MovieDTO> getAllMovies() {
-        MovieDTO movie1 = new MovieDTO();
-        movie1.setId(1);
-        movie1.setTitle("Focus");
-        movie1.setYear(2015);
-        movie1.setGenre("Comedy, crime and drama");
-        movie1.setTicket(6.10);
-        movie1.setDescription("The story follows Nicky Spurgeon, a seasoned con artist played by Will Smith," +
-                              "who takes an aspiring con artist named Jess Barrett, played by Margot Robbie, under his wing.");
-
+    public List<MovieDTO> getAll() {
+        MovieDTO movie1 = new MovieDTO(
+                1,
+                "The Shawshank Redemption",
+                1994,
+                7.99,
+                "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion."
+        );
         MovieDTO movie2 = new MovieDTO();
         movie2.setId(2);
-        movie2.setTitle("The Devil's Advocate");
-        movie2.setYear(1997);
-        movie2.setGenre("Thriller");
-        movie2.setTicket(8.0);
-        movie2.setDescription("The story follows Kevin Lomax, a talented young attorney played by Keanu Reeves," +
-                              " who is recruited by a powerful law firm in New York City");
+        movie2.setTitle("The Godfather");
+        movie2.setYear(1972);
+        movie2.setTicket(10.49);
+        movie2.setDescription("Don Vito Corleone, head of a mafia family, decides to hand over his empire to his youngest son Michael. " +
+                "However, his decision unintentionally puts the lives of his loved ones in grave danger.");
 
-
-        List<MovieDTO> MovieDTOList =  new ArrayList<>();
-        MovieDTOList.add(movie1);
-        MovieDTOList.add(movie2);
-
-        return MovieDTOList;
+        return List.of(movie1, movie2);
     }
 
-    public MovieDTO getById(Integer id) {
-        List<MovieDTO> movieDTOList = getAllMovies();
-        for(MovieDTO movieDTO : movieDTOList) {
-            if(movieDTO.getId().equals(id)) {
-                return movieDTO;
-            }
+    public MovieDTO getById(int id) {
+
+        for (MovieDTO movieDTO : getAll()) {
+            if (movieDTO.getId().equals(id)) return movieDTO;
         }
         return null;
     }
 
-    public List<MovieDTO> getByParams(String title, String genre, Integer year) {
-        List<MovieDTO> movieDTOList = getAllMovies();
-        List<MovieDTO> moviesByParams = new ArrayList<>();
+    public List<MovieDTO> getByYearRange(int fromYear, int toYear) {
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+        for (MovieDTO movieDTO : getAll()) {
+            if (movieDTO.getYear() >= fromYear && movieDTO.getYear() < toYear) movieDTOList.add(movieDTO);
+        }
+        return movieDTOList;
+    }
 
-        for (MovieDTO movieDTO : movieDTOList) {
-            if ((title == null || movieDTO.getTitle().contains(title)) &&
-                    (genre == null || movieDTO.getGenre().contains(genre)) &&
-                    (year == null || movieDTO.getYear().equals(year))) {
-                moviesByParams.add(movieDTO);
-            }
+    public List<MovieDTO> getByYearAndPrice(Map<String, Object> params) {
+
+        List<MovieDTO> movieDTOList = new ArrayList<>();
+
+        Integer fromYear = Integer.parseInt((String) params.get("fromYear"));
+        Integer toYear = Integer.parseInt((String) params.get("toYear"));
+        String withTitle = (String) params.get("withTitle");
+
+        for (MovieDTO movieDTO : getAll()) {
+            if (movieDTO.getYear() >= fromYear && movieDTO.getYear() < toYear && movieDTO.getTitle().contains(withTitle))
+                movieDTOList.add(movieDTO);
         }
 
-        return moviesByParams;
+        return movieDTOList;
     }
 
-    public List<MovieDTO> getByReqMap(Map<String, Object> mapa) {
-        String title = (String) mapa.get("title");
-        String genre = (String) mapa.get("genre");
-        Integer year = (Integer) mapa.get("year");
-        return getByParams(title, genre, year);
-    }
+    public List<MovieDTO> getByParamsClass(MovieFilter movieFilter) {
 
-    public List<MovieDTO> getByClass(MovieFilter movieFilter) {
-        return getByParams(movieFilter.getTitle(), movieFilter.getGenre(), movieFilter.getYear());
-    }
+        List<MovieDTO> movieDTOList = new ArrayList<>();
 
+        Integer fromYear = movieFilter.getFromYear();
+        Integer toYear = movieFilter.getToYear();
+        String withTitle = movieFilter.getWithTitle();
+
+        for (MovieDTO movieDTO : getAll()) {
+            if (movieDTO.getYear() >= fromYear && movieDTO.getYear() < toYear && movieDTO.getTitle().contains(withTitle))
+                movieDTOList.add(movieDTO);
+        }
+
+        return movieDTOList;
+    }
 }

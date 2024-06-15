@@ -1,14 +1,15 @@
-package com.logate.summer.dto;
+package com.logate.summer.dto.fakestore;
 
 import lombok.*;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-public class FakeStoreProductDTONoID {
+public class FakeStoreProductDTO {
 
+    Integer id;
     String title;
     Double price;
     String category;

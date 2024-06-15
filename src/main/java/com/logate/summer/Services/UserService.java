@@ -1,20 +1,26 @@
 package com.logate.summer.Services;
 
+import com.logate.summer.Repositories.IUserRepository;
 import com.logate.summer.Repositories.UserRepository;
 import com.logate.summer.dto.UserDTO;
 import com.logate.summer.dto.UserDTONoID;
+import com.logate.summer.entities.User;
 import com.logate.summer.filter.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service //@Component
 public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    IUserRepository iUserRepository;
 
     public List<UserDTO> getAll() {
         return userRepository.getAll();
@@ -47,4 +53,11 @@ public class UserService {
     public void delete(Integer id) {
         userRepository.delete(id);
     }
+
+//    public void testJpa() {
+//        List<User> userList = iUserRepository.findAll(); //list svih user
+//        Optional<User> user = iUserRepository.findById(1); //user sa id
+//        Boolean exists = iUserRepository.exists() //lista user-a
+//        Long count = iUserRepository.count() // broj redova user-a tabale
+//    }
 }

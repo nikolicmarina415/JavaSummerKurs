@@ -3,3 +3,24 @@ server:
 
 fakestore:
   url: https://fakestoreapi.com
+
+
+spring:
+  datasource:
+    name: MySQL Connection
+    url: jdbc:mysql://localhost:3306/java_summer_kurs_2024?useSSL=false&serverTimezone=CET&allowPublicKeyRetrival=true&useUnicode=true
+    username: root
+    password: Aswdijkl123!@#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    hikari:
+      allow-pool-suspension: true
+
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: none
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQLDialect
