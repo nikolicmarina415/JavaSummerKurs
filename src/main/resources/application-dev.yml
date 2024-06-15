@@ -8,9 +8,9 @@ fakestore:
 spring:
   datasource:
     name: MySQL Connection
-    url: jdbc:mysql://localhost:3306/java_summer_kurs_2024?useSSL=false&serverTimezone=CET&allowPublicKeyRetrival=true&useUnicode=true
+    url: jdbc:mysql://localhost:3306/kurs_24_logate
     username: root
-    password: Aswdijkl123!@#
+    password: ekologija2508
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     hikari:
