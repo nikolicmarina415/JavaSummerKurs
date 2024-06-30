@@ -1,12 +1,11 @@
 package com.logate.summer.Controllers;
 
 import com.logate.summer.Services.UserService;
-import com.logate.summer.dto.UserDTO;
-import com.logate.summer.dto.UserDTONoID;
+import com.logate.summer.dto.user.UserDTO;
+import com.logate.summer.dto.user.UserDTONoID;
 import com.logate.summer.filter.UserFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.aot.generate.InMemoryGeneratedFiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

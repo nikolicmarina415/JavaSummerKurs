@@ -1,22 +1,20 @@
 package com.logate.summer.entities;
 
-import com.fasterxml.jackson.annotation.JsonTypeId;
-import com.logate.summer.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "category")
+@DynamicUpdate
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Category {
 
     @Id
@@ -30,7 +28,20 @@ public class Category {
     @Column(name = "is_active")
     Boolean isActive = true;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL) //{CascadeType.PERSIST, CascadeType.MERGE}
+    @ToString.Exclude
     List<Product> productList = new ArrayList<>();
+
+    public void add(Product product) {
+        if(product !=  null) {
+            this.productList.add(product);
+        }
+    }
+
+    public void remove(Product product){
+        if(product != null) {
+            this.productList.remove(product);
+        }
+    }
 
 }

@@ -1,9 +1,8 @@
 package com.logate.summer.Repositories;
 
-import com.logate.summer.dto.UserDTO;
-import com.logate.summer.dto.UserDTONoID;
+import com.logate.summer.dto.user.UserDTO;
+import com.logate.summer.dto.user.UserDTONoID;
 import com.logate.summer.filter.UserFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

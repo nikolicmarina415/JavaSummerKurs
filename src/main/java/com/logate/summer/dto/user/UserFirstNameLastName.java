@@ -1,4 +1,4 @@
-package com.logate.summer.dto;
+package com.logate.summer.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,4 +14,4 @@ public class UserFirstNameLastName {
     String getFistName;
     String getLastName;
 
-}git status
+}

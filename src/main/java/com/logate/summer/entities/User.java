@@ -14,6 +14,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class User {
 
     @Id
@@ -40,14 +41,31 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
 //    @ManyToOne
     @JoinColumn(name = "departament_id")
+    @ToString.Exclude
 //    @JsonIgnoreProperties
 //     @JsonBackReference
             Departament departament;
 
-    //    @ManyToMany
-//    @JoinTable(name = "user_role",
-//    joinColumns = @JoinColumn(name = "user_id"),
-//    inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @ManyToMany(mappedBy = "userSet")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+//    @ManyToMany(mappedBy = "userSet")
+    @ToString.Exclude
     Set<Role> roleSet = new HashSet<>();
+
+    @OneToOne(mappedBy = "user")
+    UserDetails userDetails;
+
+    public void addRole(Role role) {
+        if(role !=  null) {
+            roleSet.add(role);
+        }
+    }
+
+    public void removeRole(Role role) {
+        if(role != null) {
+            roleSet.remove(role);
+        }
+    }
 }

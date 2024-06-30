@@ -2,16 +2,14 @@ package com.logate.summer.Services;
 
 import com.logate.summer.Repositories.IUserRepository;
 import com.logate.summer.Repositories.UserRepository;
-import com.logate.summer.dto.UserDTO;
-import com.logate.summer.dto.UserDTONoID;
-import com.logate.summer.entities.User;
+import com.logate.summer.dto.user.UserDTO;
+import com.logate.summer.dto.user.UserDTONoID;
 import com.logate.summer.filter.UserFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service //@Component
 public class UserService {

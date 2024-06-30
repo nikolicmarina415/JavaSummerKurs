@@ -1,4 +1,4 @@
-package com.logate.summer.dto;
+package com.logate.summer.dto.user;
 
 public class UserDTO {
 

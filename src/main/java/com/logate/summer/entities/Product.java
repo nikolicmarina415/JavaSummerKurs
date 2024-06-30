@@ -1,3 +1,4 @@
+
 package com.logate.summer.entities;
 
 import jakarta.persistence.*;
@@ -30,7 +31,7 @@ public class Product {
     @Column(name = "created_date")
     Date createDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     Category category;
 }
