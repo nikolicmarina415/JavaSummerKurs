@@ -1,94 +1,46 @@
 package com.logate.summer.Repositories;
 
-import com.logate.summer.dto.order.command.OrderDTO;
-import com.logate.summer.dto.order.command.OrderItemDTO;
-import com.logate.summer.dto.order.query.OrderQueryDTO;
-import com.logate.summer.dto.order.query.OrderQueryDTOWithID;
 import com.logate.summer.entities.Order;
-import com.logate.summer.entities.OrderItem;
 import com.logate.summer.entities.OrderStatus;
-import com.logate.summer.mapper.OrderMapper;
-import com.logate.summer.mapper.OrderItemMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
-public class OrderRepository {
+public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    private final Map<Long, Order> orders = new HashMap<>();
-    private final AtomicLong nextId = new AtomicLong(1);
+    @Override
+    @Cacheable(value = "orders", key = "#id")
+    Optional<Order> findById(Long id);
 
-    public List<OrderQueryDTO> getAll() {
-        return orders.values().stream()
-                .map(OrderMapper.INSTANCE::orderToOrderQueryDTO)
-                .collect(Collectors.toList());
-    }
+    @Cacheable(value = "orders", key = "'customer_' + #customerId")
+    List<Order> findByCustomerId(Long customerId);
 
-    public OrderQueryDTO getById(Long id) {
-        Order order = orders.get(id);
-        if (order != null) {
-            return OrderMapper.INSTANCE.orderToOrderQueryDTO(order);
-        }
-        return null;
-    }
+    @Override
+    @CachePut(value = "orders", key = "#result.id")
+    <S extends Order> S save(S order);
 
-    public List<OrderQueryDTO> getByCustomerId(Long customerId) {
-        return orders.values().stream()
-                .filter(order -> Objects.equals(order.getCustomerId(), customerId))
-                .map(OrderMapper.INSTANCE::orderToOrderQueryDTO)
-                .collect(Collectors.toList());
-    }
+    @Transactional
+    @Modifying
+    @Query("UPDATE Order o SET o.status = :status WHERE o.id = :orderId")
+    int updateOrderStatus(@Param("orderId") Long orderId, @Param("status") OrderStatus status);
 
-    public OrderQueryDTOWithID create(OrderDTO orderDTO) {
-        Long orderId = nextId.getAndIncrement();
-        Order order = OrderMapper.INSTANCE.orderDTOToOrder(orderDTO);
-        order.setId(orderId);
-        orders.put(orderId, order);
-        return OrderMapper.INSTANCE.orderToOrderQueryDTOWithID(order);
-    }
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM OrderItem oi WHERE oi.order.id = :orderId")
+    void deleteOrderItemsByOrderId(@Param("orderId") Long orderId);
 
-    public OrderQueryDTOWithID update(Long orderId, OrderStatus status) {
-        Order order = orders.get(orderId);
-        if (order != null) {
-            order.setStatus(status);
-            orders.put(orderId, order);
-            return OrderMapper.INSTANCE.orderToOrderQueryDTOWithID(order);
-        }
-        return null;
-    }
-
-    public void delete(Long orderId) {
-        orders.remove(orderId);
-    }
-
-    public void addOrderItem(Long orderId, OrderItemDTO orderItemDTO) {
-        Order order = orders.get(orderId);
-        if (order != null) {
-            OrderItem orderItem = OrderItemMapper.INSTANCE.orderItemDTOToOrderItem(orderItemDTO);
-            orderItem.setOrder(order);
-            order.getOrderItems().add(orderItem);
-        }
-    }
-
-    public void updateOrderItem(Long orderId, OrderItemDTO orderItemDTO) {
-        Order order = orders.get(orderId);
-        if (order != null) {
-            for (OrderItem orderItem : order.getOrderItems()) {
-                if (Objects.equals(orderItem.getId(), orderItemDTO.getId())) {
-                    orderItem.setProductId(orderItemDTO.getProductId());
-                    orderItem.setQuantity(orderItemDTO.getQuantity());
-                }
-            }
-        }
-    }
-
-    public void removeOrderItem(Long orderId, Long orderItemId) {
-        Order order = orders.get(orderId);
-        if (order != null) {
-            order.getOrderItems().removeIf(item -> Objects.equals(item.getId(), orderItemId));
-        }
-    }
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Order o WHERE o.id = :orderId")
+    void deleteOrderById(@Param("orderId") Long orderId);
 }

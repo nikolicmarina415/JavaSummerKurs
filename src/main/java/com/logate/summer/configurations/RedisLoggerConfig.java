@@ -11,7 +11,7 @@ public class RedisLoggerConfig implements CacheEventListener<Object, Object> {
 
     @Override
     public void onEvent(CacheEvent<? extends Object, ? extends Object> cacheEvent) {
-        log.info("Tip događaja u kešu: {}, ključ: {}, stara vrednost: {}, nova vrednost: {}",
+        log.info("Tip događaja u kešu: {}, ključ: {}, stara vrijednost: {}, nova vrijednost: {}",
                 cacheEvent.getType(), cacheEvent.getKey(), cacheEvent.getOldValue(), cacheEvent.getNewValue());
     }
 }

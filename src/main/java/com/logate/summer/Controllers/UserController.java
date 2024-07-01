@@ -42,8 +42,6 @@ public class UserController {
         return new ResponseEntity<UserDTO>(userDTO, HttpStatus.OK);
     }
 
-    //Servus za user sa gradom
-    //@RequestParam(value = "grad", required = true)
     @GetMapping("byCity")
     public ResponseEntity<List<UserDTO>> getByCity(@RequestParam(value = "grad") String city,
                                                    @RequestParam("godine") Integer age) {
@@ -73,11 +71,6 @@ public class UserController {
         }
         return new ResponseEntity<List<UserDTO>>(userDTOList, HttpStatus.OK);
     }
-
-    //kreiranje novog korisnika
-    //1. return UserDTO
-    //2. return Integer id
-    //3. return Void
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTONoID userDTONoID) {
         LOGGER.info("Predate req body {}", userDTONoID.toString());

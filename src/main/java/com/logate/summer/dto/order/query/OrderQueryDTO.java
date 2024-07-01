@@ -1,21 +1,22 @@
 package com.logate.summer.dto.order.query;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class OrderQueryDTO {
 
-     Long id;
-     Long customerId;
-     LocalDateTime createdAt;
-     BigDecimal totalPrice;
-     String status;
-
+     private Long id;
+     private Long customerId;
+     private LocalDateTime createdAt;
+     private BigDecimal totalPrice;
+     private String status;
 }

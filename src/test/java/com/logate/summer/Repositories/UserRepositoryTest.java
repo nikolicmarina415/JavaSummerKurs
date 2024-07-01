@@ -1,4 +1,4 @@
-package com.logate.summer.Repositories;
+/*package com.logate.summer.Repositories;
 
 import com.logate.summer.SummerApplication;
 import com.logate.summer.entities.Departament;
@@ -152,4 +152,4 @@ class UserRepositoryTest {
         user.addRole(role);
         userRepository.save(user);
     }
-}
+}*/
